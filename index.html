@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Démo SOAP</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">SOAP</div>
+    <div>
+      <div class="topbar-title">Démo Interactive — Simple Object Access Protocol</div>
+      <div class="topbar-sub">UL/EPL · INF1429 · MEBOUNOU & HUNLEDE · Groupe</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <div class="badge live"><div class="dot-live"></div>Démo active</div>
+    <div class="badge">W3C Standard 1.2</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="container">
+<div class="tabs">
+  <button class="tab active" onclick="showTab('intro')"><span class="tab-icon">📡</span>Qu'est-ce que SOAP ?</button>
+  <button class="tab" onclick="showTab('anatomy')"><span class="tab-icon">🔬</span>Anatomie du message</button>
+  <button class="tab" onclick="showTab('simulator')"><span class="tab-icon">⚡</span>Simulateur live</button>
+  <button class="tab" onclick="showTab('wsdl')"><span class="tab-icon">📜</span>SOAP & WSDL</button>
+  <button class="tab" onclick="showTab('ws')"><span class="tab-icon">🔒</span>Extensions WS-*</button>
+  <button class="tab" onclick="showTab('compare')"><span class="tab-icon">⚖️</span>SOAP vs REST</button>
+  <button class="tab" onclick="showTab('apps')"><span class="tab-icon">🌍</span>Applications réelles</button>
+</div>
+
+<!-- ═══════════ TAB 1 : INTRO ═══════════ -->
+<div id="tab-intro" class="section active">
+  <div class="grid-2" style="gap:20px;margin-bottom:20px">
+    <div>
+      <div class="info-box blue">
+        <div class="info-icon">📡</div>
+        <div><strong>SOAP = Simple Object Access Protocol</strong><br>
+        Protocole de messagerie basé sur <strong>XML</strong>, standardisé par le <strong>W3C (2003)</strong>. Permet l'échange de messages structurés entre applications dans un environnement distribué — indépendant du langage, de la plateforme et du système d'exploitation.</div>
+      </div>
+      <div class="info-box green" style="margin-top:0">
+        <div class="info-icon">🏭</div>
+        <div><strong>Qui l'utilise ?</strong> Banques mondiales, hôpitaux, gouvernements, opérateurs télécom, ERP SAP/Oracle. Partout où la <strong>sécurité, la fiabilité et les contrats stricts</strong> sont non-négociables.</div>
+      </div>
+      <div class="info-box orange" style="margin-top:0">
+        <div class="info-icon">📅</div>
+        <div><strong>Historique :</strong> XML-RPC (1998, Microsoft) → SOAP 1.0 (2000, W3C Note) → SOAP 1.2 (2003, W3C Recommandation officielle). Supporté par Microsoft .NET, IBM WebSphere, SAP, Oracle, Apache Axis2…</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title" style="color:var(--teal)">⚙️ Pourquoi SOAP plutôt qu'une solution maison ?</span></div>
+      <div class="card-body">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num" style="background:#1F6FEB22;color:var(--blue);border:1px solid #1F6FEB44">1</div>
+            <div class="step-body"><div class="step-title">Standard universel</div><div class="step-desc">Tous les langages (Java, .NET, Python, COBOL) produisent et consomment SOAP identiquement grâce au standard W3C.</div></div>
+          </div>
+          <div class="step">
+            <div class="step-num" style="background:#2DD4BF22;color:var(--teal);border:1px solid #2DD4BF44">2</div>
+            <div class="step-body"><div class="step-title">Sécurité niveau message</div><div class="step-desc">WS-Security chiffre le contenu indépendamment du transport — même sans HTTPS, le message reste protégé.</div></div>
+          </div>
+          <div class="step">
+            <div class="step-num" style="background:#3FB95022;color:var(--green);border:1px solid #3FB95044">3</div>
+            <div class="step-body"><div class="step-title">Transactions ACID</div><div class="step-desc">WS-AtomicTransaction garantit la cohérence sur plusieurs systèmes : tout réussit ou tout est annulé.</div></div>
+          </div>
+          <div class="step">
+            <div class="step-num" style="background:#F0883E22;color:var(--orange);border:1px solid #F0883E44">4</div>
+            <div class="step-body"><div class="step-title">Contrat WSDL auto-documenté</div><div class="step-desc">Le WSDL décrit formellement le service — les outils génèrent le code client automatiquement.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flow diagram -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">🔄 Flux d'un appel SOAP typique</span></div>
+    <div class="card-body">
+      <div class="arrow-flow">
+        <div class="arrow-node" style="border-color:#2DD4BF44;color:var(--teal)">📱 Client<br><small style="color:var(--muted)">App mobile / Web</small></div>
+        <div class="arrow-sep">→</div>
+        <div class="arrow-node" style="border-color:#1F6FEB44;color:var(--blue)">📄 Requête SOAP<br><small style="color:var(--muted)">XML dans Envelope</small></div>
+        <div class="arrow-sep">→</div>
+        <div class="arrow-node" style="border-color:#F0883E44;color:var(--orange)">🔒 WS-Security<br><small style="color:var(--muted)">Chiffrement + Auth</small></div>
+        <div class="arrow-sep">→</div>
+        <div class="arrow-node" style="border-color:#3FB95044;color:var(--green)">⚙️ Serveur SOAP<br><small style="color:var(--muted)">Traite la requête</small></div>
+        <div class="arrow-sep">→</div>
+        <div class="arrow-node" style="border-color:#D2A8FF44;color:var(--purple)">📄 Réponse SOAP<br><small style="color:var(--muted)">XML signé</small></div>
+        <div class="arrow-sep">→</div>
+        <div class="arrow-node" style="border-color:#2DD4BF44;color:var(--teal)">📱 Client reçoit<br><small style="color:var(--muted)">Données parsées</small></div>
+      </div>
+      <div class="tip">Pour la présentation : montrez ce flux en pointant sur la slide, puis dites "on va maintenant voir chaque composant en détail et faire une vraie démo live dans l'onglet Simulateur".</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 2 : ANATOMIE ═══════════ -->
+<div id="tab-anatomy" class="section">
+  <div class="grid-2" style="gap:20px">
+    <div>
+      <div style="margin-bottom:12px;font-size:13px;color:var(--muted)">👆 Cliquez sur une couche pour voir les détails</div>
+      <div class="anatomy-box">
+        <div class="anatomy-layer" style="background:#1F3A5C;border-color:#2E75B6;color:var(--blue)" onclick="showLayer('envelope')">
+          <div class="anatomy-title">&lt;soap:Envelope&gt; <span class="anatomy-badge" style="background:#1F6FEB22;color:var(--blue);border:1px solid #1F6FEB44">OBLIGATOIRE</span></div>
+          <div class="anatomy-desc">Élément racine — identifie le document XML comme message SOAP. Définit les espaces de noms.</div>
+        </div>
+        <div class="anatomy-layer" style="background:#1A3A2A;border-color:#0D9488;color:var(--teal);margin:4px" onclick="showLayer('header')">
+          <div class="anatomy-title">&lt;soap:Header&gt; <span class="anatomy-badge" style="background:#2DD4BF22;color:var(--teal);border:1px solid #2DD4BF44">OPTIONNEL</span></div>
+          <div class="anatomy-desc">Métadonnées du message : authentification, routage, transaction. 1er enfant de l'Envelope.</div>
+        </div>
+        <div class="anatomy-layer" style="background:#1A2A1A;border-color:#16A34A;color:var(--green);margin:8px" onclick="showLayer('body')">
+          <div class="anatomy-title">&lt;soap:Body&gt; <span class="anatomy-badge" style="background:#3FB95022;color:var(--green);border:1px solid #3FB95044">OBLIGATOIRE</span></div>
+          <div class="anatomy-desc">Contenu principal du message — requête ou réponse de l'opération métier.</div>
+        </div>
+        <div class="anatomy-layer" style="background:#2A1A1A;border-color:#DC2626;color:var(--red);margin:12px" onclick="showLayer('fault')">
+          <div class="anatomy-title">&lt;soap:Fault&gt; <span class="anatomy-badge" style="background:#FF7B7222;color:var(--red);border:1px solid #FF7B7244">DANS LE BODY</span></div>
+          <div class="anatomy-desc">Signale une erreur de traitement. Code + Reason + Detail.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="anatomy-detail" id="anatomy-detail">
+        <div class="anatomy-detail-title" style="color:var(--muted)">← Cliquez sur un composant pour voir son explication et un exemple de code</div>
+        <div style="color:var(--muted);font-size:12px;margin-top:12px">SOAP est structuré comme une enveloppe postale :<br>• L'Envelope = l'enveloppe<br>• Le Header = les informations d'acheminement<br>• Le Body = le contenu de la lettre<br>• Le Fault = le retour en cas d'erreur de livraison</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="code-header">
+      <span class="code-filename">📄 message_soap_complet.xml — Requête bancaire avec sécurité</span>
+      <button class="copy-btn" onclick="copyCode('full-soap')">Copier</button>
+    </div>
+    <pre id="full-soap"><span class="c-cmt">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="c-tag">&lt;soap:Envelope</span>
+  <span class="c-attr">xmlns:soap</span>=<span class="c-val">"http://www.w3.org/2003/05/soap-envelope"</span>
+  <span class="c-attr">soap:encodingStyle</span>=<span class="c-val">"http://www.w3.org/2003/05/soap-encoding"</span><span class="c-tag">&gt;</span>
+
+  <span class="c-cmt">&lt;!-- ①  HEADER : métadonnées (optionnel) --&gt;</span>
+  <span class="c-tag">&lt;soap:Header&gt;</span>
+    <span class="c-tag">&lt;wsse:Security</span> <span class="c-attr">xmlns:wsse</span>=<span class="c-val">"http://docs.oasis-open.org/wss/..."</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;wsse:UsernameToken&gt;</span>
+        <span class="c-tag">&lt;wsse:Username&gt;</span><span class="c-str">koffi.ama@banque.tg</span><span class="c-tag">&lt;/wsse:Username&gt;</span>
+        <span class="c-tag">&lt;wsse:Password&gt;</span><span class="c-str">••••••••</span><span class="c-tag">&lt;/wsse:Password&gt;</span>
+      <span class="c-tag">&lt;/wsse:UsernameToken&gt;</span>
+    <span class="c-tag">&lt;/wsse:Security&gt;</span>
+  <span class="c-tag">&lt;/soap:Header&gt;</span>
+
+  <span class="c-cmt">&lt;!-- ②  BODY : contenu principal (obligatoire) --&gt;</span>
+  <span class="c-tag">&lt;soap:Body&gt;</span>
+    <span class="c-tag">&lt;bank:ConsulterSolde</span> <span class="c-attr">xmlns:bank</span>=<span class="c-val">"http://banque.tg/services/v2"</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;bank:NumeroCompte&gt;</span><span class="c-str">TG53TG8199802100040000000000</span><span class="c-tag">&lt;/bank:NumeroCompte&gt;</span>
+      <span class="c-tag">&lt;bank:Devise&gt;</span><span class="c-str">XOF</span><span class="c-tag">&lt;/bank:Devise&gt;</span>
+    <span class="c-tag">&lt;/bank:ConsulterSolde&gt;</span>
+  <span class="c-tag">&lt;/soap:Body&gt;</span>
+
+<span class="c-tag">&lt;/soap:Envelope&gt;</span></pre>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 3 : SIMULATEUR ═══════════ -->
+<div id="tab-simulator" class="section">
+  <div class="info-box green" style="margin-bottom:16px">
+    <div class="info-icon">⚡</div>
+    <div><strong>Simulateur SOAP interactif</strong> — Sélectionnez un scénario, configurez les paramètres, et générez un message SOAP valide avec sa réponse. Idéal pour la démo en classe !</div>
+  </div>
+
+  <div class="sim-wrap">
+    <div class="sim-top">
+      <div>
+        <div class="sim-label">Scénario</div>
+        <select class="sim-select" id="scenario" onchange="updateScenario()">
+          <option value="solde">🏦 Consulter solde bancaire</option>
+          <option value="virement">💸 Virement international</option>
+          <option value="meteo">🌤 Service météo</option>
+          <option value="patient">🏥 Dossier patient (HL7)</option>
+          <option value="taxe">🏛 Déclaration fiscale</option>
+        </select>
+      </div>
+      <div>
+        <div class="sim-label">Paramètre 1</div>
+        <input class="sim-input" id="param1" value="TG53TG8199802100040000000000" style="width:260px" placeholder="Numéro de compte">
+      </div>
+      <div>
+        <div class="sim-label">Paramètre 2</div>
+        <input class="sim-input" id="param2" value="XOF" style="width:80px" placeholder="Devise">
+      </div>
+      <div>
+        <div class="sim-label">Sécurité</div>
+        <select class="sim-select" id="security">
+          <option value="none">Aucune</option>
+          <option value="basic" selected>WS-Security Basic</option>
+          <option value="token">WS-Security Token</option>
+        </select>
+      </div>
+      <button class="sim-btn" id="sendBtn" onclick="sendSOAP()">
+        <span>▶</span> Envoyer requête SOAP
+      </button>
+    </div>
+
+    <div class="sim-grid">
+      <div class="sim-pane">
+        <div class="sim-pane-title">
+          📤 Requête générée <span class="pill pill-req">REQUEST</span>
+        </div>
+        <div class="sim-output" id="request-output"><span class="c-cmt">← Cliquez sur "Envoyer" pour générer le message SOAP</span></div>
+      </div>
+      <div class="sim-pane">
+        <div class="sim-pane-title" id="res-title">
+          📥 Réponse du serveur <span class="pill pill-res">RESPONSE</span>
+        </div>
+        <div class="sim-output" id="response-output"><span class="c-cmt">← La réponse apparaîtra ici</span></div>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-dot idle" id="status-dot"></div>
+      <span id="status-text" style="color:var(--muted)">En attente — choisissez un scénario et cliquez sur Envoyer</span>
+      <span style="margin-left:auto;color:var(--muted);font-family:Consolas,monospace" id="timing"></span>
+    </div>
+  </div>
+
+  <div style="margin-top:20px" class="grid-2">
+    <div class="card">
+      <div class="card-header"><span class="card-title" style="color:var(--red)">⚠️ Simuler une erreur SOAP (Fault)</span></div>
+      <div class="card-body">
+        <div style="margin-bottom:12px;font-size:12.5px;color:var(--muted)">Que se passe-t-il quand le serveur rencontre une erreur ? SOAP retourne un élément <code style="color:var(--red)">&lt;soap:Fault&gt;</code> structuré.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="simulateFault('sender')" style="background:#FF7B7222;border:1px solid #FF7B7244;color:var(--red);padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer">❌ Erreur client (Sender)</button>
+          <button onclick="simulateFault('receiver')" style="background:#F0883E22;border:1px solid #F0883E44;color:var(--orange);padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer">🔥 Erreur serveur (Receiver)</button>
+          <button onclick="simulateFault('auth')" style="background:#D2A8FF22;border:1px solid #D2A8FF44;color:var(--purple);padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer">🔒 Erreur authentification</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title" style="color:var(--yellow)">💡 Explications pour la classe</span></div>
+      <div class="card-body">
+        <div id="explanation" style="font-size:12.5px;color:var(--muted);line-height:1.7">
+          Lancez un scénario et je vous expliquerai chaque partie du message généré, ce qu'elle signifie et pourquoi elle est structurée ainsi.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 4 : WSDL ═══════════ -->
+<div id="tab-wsdl" class="section">
+  <div class="info-box blue" style="margin-bottom:16px">
+    <div class="info-icon">📜</div>
+    <div><strong>WSDL = Web Services Description Language</strong> — Le contrat du service. Décrit QUOI fait le service (opérations, types de données, adresse réseau). SOAP décrit COMMENT les messages sont échangés. Ensemble = système complet et auto-documenté.</div>
+  </div>
+
+  <div class="grid-2" style="gap:16px">
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><span class="card-title">🏗 Les 5 blocs du WSDL</span></div>
+        <div class="card-body">
+          <div class="steps">
+            <div class="step">
+              <div class="step-num" style="background:#2DD4BF22;color:var(--teal);border:1px solid #2DD4BF44;font-size:11px">&lt;types&gt;</div>
+              <div class="step-body"><div class="step-title" style="color:var(--teal)">Types de données (XSD)</div><div class="step-desc">Définit les structures XML attendues dans les messages — utilise XSD.</div></div>
+            </div>
+            <div class="step">
+              <div class="step-num" style="background:#3FB95022;color:var(--green);border:1px solid #3FB95044;font-size:11px">&lt;msg&gt;</div>
+              <div class="step-body"><div class="step-title" style="color:var(--green)">Messages</div><div class="step-desc">Décrit les paramètres d'entrée et de sortie de chaque opération.</div></div>
+            </div>
+            <div class="step">
+              <div class="step-num" style="background:#F0883E22;color:var(--orange);border:1px solid #F0883E44;font-size:11px">&lt;port&gt;</div>
+              <div class="step-body"><div class="step-title" style="color:var(--orange)">PortType — Interface</div><div class="step-desc">Liste les opérations disponibles = l'interface abstraite du service.</div></div>
+            </div>
+            <div class="step">
+              <div class="step-num" style="background:#1F6FEB22;color:var(--blue);border:1px solid #1F6FEB44;font-size:11px">&lt;bind&gt;</div>
+              <div class="step-body"><div class="step-title" style="color:var(--blue)">Binding</div><div class="step-desc">Lie les opérations au protocole SOAP et au transport HTTP.</div></div>
+            </div>
+            <div class="step">
+              <div class="step-num" style="background:#D2A8FF22;color:var(--purple);border:1px solid #D2A8FF44;font-size:11px">&lt;svc&gt;</div>
+              <div class="step-body"><div class="step-title" style="color:var(--purple)">Service — Adresse réseau</div><div class="step-desc">Donne l'URL endpoint du service pour les appels réels.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="info-box orange">
+        <div class="info-icon">🤖</div>
+        <div><strong>Génération automatique de code !</strong><br>Avec le WSDL, des outils comme <code>wsimport</code> (Java), <code>wsdl.exe</code> (.NET) ou SoapUI génèrent automatiquement tout le code client — on n'écrit <strong>jamais</strong> le XML SOAP à la main en production.</div>
+      </div>
+    </div>
+    <div>
+      <div class="code-header">
+        <span class="code-filename">📜 service_banque.wsdl — Extrait complet</span>
+        <button class="copy-btn" onclick="copyCode('wsdl-code')">Copier</button>
+      </div>
+      <pre id="wsdl-code" style="font-size:11px"><span class="c-tag">&lt;wsdl:definitions</span>
+  <span class="c-attr">xmlns:wsdl</span>=<span class="c-val">"http://schemas.xmlsoap.org/wsdl/"</span>
+  <span class="c-attr">xmlns:soap</span>=<span class="c-val">"http://schemas.xmlsoap.org/wsdl/soap/"</span>
+  <span class="c-attr">xmlns:xs</span>=<span class="c-val">"http://www.w3.org/2001/XMLSchema"</span>
+  <span class="c-attr">targetNamespace</span>=<span class="c-val">"http://banque.tg/services"</span><span class="c-tag">&gt;</span>
+
+  <span class="c-cmt">&lt;!-- 1. Types XSD des données --&gt;</span>
+  <span class="c-tag">&lt;wsdl:types&gt;</span>
+    <span class="c-tag">&lt;xs:schema</span> <span class="c-attr">targetNamespace</span>=<span class="c-val">"http://banque.tg/services"</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;xs:element</span> <span class="c-attr">name</span>=<span class="c-val">"ConsulterSolde"</span><span class="c-tag">&gt;</span>
+        <span class="c-tag">&lt;xs:complexType&gt;&lt;xs:sequence&gt;</span>
+          <span class="c-tag">&lt;xs:element</span> <span class="c-attr">name</span>=<span class="c-val">"NumeroCompte"</span> <span class="c-attr">type</span>=<span class="c-val">"xs:string"</span><span class="c-tag">/&gt;</span>
+          <span class="c-tag">&lt;xs:element</span> <span class="c-attr">name</span>=<span class="c-val">"Devise"</span> <span class="c-attr">type</span>=<span class="c-val">"xs:string"</span><span class="c-tag">/&gt;</span>
+        <span class="c-tag">&lt;/xs:sequence&gt;&lt;/xs:complexType&gt;</span>
+      <span class="c-tag">&lt;/xs:element&gt;</span>
+    <span class="c-tag">&lt;/xs:schema&gt;</span>
+  <span class="c-tag">&lt;/wsdl:types&gt;</span>
+
+  <span class="c-cmt">&lt;!-- 2. Messages (requête + réponse) --&gt;</span>
+  <span class="c-tag">&lt;wsdl:message</span> <span class="c-attr">name</span>=<span class="c-val">"SoldeRequest"</span><span class="c-tag">&gt;</span>
+    <span class="c-tag">&lt;wsdl:part</span> <span class="c-attr">name</span>=<span class="c-val">"body"</span> <span class="c-attr">element</span>=<span class="c-val">"tns:ConsulterSolde"</span><span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;/wsdl:message&gt;</span>
+
+  <span class="c-cmt">&lt;!-- 3. Interface (opérations disponibles) --&gt;</span>
+  <span class="c-tag">&lt;wsdl:portType</span> <span class="c-attr">name</span>=<span class="c-val">"BanqueService"</span><span class="c-tag">&gt;</span>
+    <span class="c-tag">&lt;wsdl:operation</span> <span class="c-attr">name</span>=<span class="c-val">"ConsulterSolde"</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;wsdl:input</span>  <span class="c-attr">message</span>=<span class="c-val">"tns:SoldeRequest"</span><span class="c-tag">/&gt;</span>
+      <span class="c-tag">&lt;wsdl:output</span> <span class="c-attr">message</span>=<span class="c-val">"tns:SoldeResponse"</span><span class="c-tag">/&gt;</span>
+    <span class="c-tag">&lt;/wsdl:operation&gt;</span>
+  <span class="c-tag">&lt;/wsdl:portType&gt;</span>
+
+  <span class="c-cmt">&lt;!-- 4. Binding SOAP --&gt;</span>
+  <span class="c-tag">&lt;wsdl:binding</span> <span class="c-attr">name</span>=<span class="c-val">"BanqueSOAPBinding"</span> <span class="c-attr">type</span>=<span class="c-val">"tns:BanqueService"</span><span class="c-tag">&gt;</span>
+    <span class="c-tag">&lt;soap:binding</span> <span class="c-attr">style</span>=<span class="c-val">"document"</span>
+      <span class="c-attr">transport</span>=<span class="c-val">"http://schemas.xmlsoap.org/soap/http"</span><span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;/wsdl:binding&gt;</span>
+
+  <span class="c-cmt">&lt;!-- 5. Adresse du service --&gt;</span>
+  <span class="c-tag">&lt;wsdl:service</span> <span class="c-attr">name</span>=<span class="c-val">"BanqueService"</span><span class="c-tag">&gt;</span>
+    <span class="c-tag">&lt;wsdl:port</span> <span class="c-attr">name</span>=<span class="c-val">"BanqueSOAP"</span> <span class="c-attr">binding</span>=<span class="c-val">"tns:BanqueSOAPBinding"</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;soap:address</span> <span class="c-attr">location</span>=<span class="c-val">"https://api.banque.tg/soap/v2"</span><span class="c-tag">/&gt;</span>
+    <span class="c-tag">&lt;/wsdl:port&gt;</span>
+  <span class="c-tag">&lt;/wsdl:service&gt;</span>
+
+<span class="c-tag">&lt;/wsdl:definitions&gt;</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 5 : WS-* ═══════════ -->
+<div id="tab-ws" class="section">
+  <div class="info-box blue" style="margin-bottom:16px">
+    <div class="info-icon">🔒</div>
+    <div><strong>Les extensions WS-*</strong> — Ce qui fait de SOAP le standard incontournable de l'entreprise. Ces extensions s'intègrent dans les en-têtes SOAP sans modifier la structure de base du protocole.</div>
+  </div>
+  <div class="grid-2" style="gap:16px">
+    <div>
+      <div class="ws-card" style="border-color:#FF7B7244;margin-bottom:14px">
+        <div class="ws-card-hdr" style="background:#FF7B7211;color:var(--red)">🔒 WS-Security — Sécurité niveau MESSAGE</div>
+        <div class="ws-card-body">
+          <div style="color:var(--muted);margin-bottom:10px">Chiffrement XML Encryption + signature XML Signature <strong>au niveau du message</strong> — indépendant du transport. Jetons : Username, X.509, SAML. Requis par HIPAA, PCI-DSS.</div>
+          <div class="code-header" style="margin-top:8px"><span class="code-filename">ws-security-header.xml</span></div>
+          <pre style="font-size:10.5px;border-radius:0 0 6px 6px"><span class="c-tag">&lt;soap:Header&gt;</span>
+  <span class="c-tag">&lt;wsse:Security</span> <span class="c-attr">xmlns:wsse</span>=<span class="c-val">"...wss-secext-1.0.xsd"</span><span class="c-tag">&gt;</span>
+    <span class="c-tag">&lt;xenc:EncryptedKey</span> <span class="c-attr">Id</span>=<span class="c-val">"EK-001"</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;xenc:CipherData&gt;</span>
+        <span class="c-tag">&lt;xenc:CipherValue&gt;</span><span class="c-str">ABC123XYZ...</span><span class="c-tag">&lt;/xenc:CipherValue&gt;</span>
+      <span class="c-tag">&lt;/xenc:CipherData&gt;</span>
+    <span class="c-tag">&lt;/xenc:EncryptedKey&gt;</span>
+    <span class="c-tag">&lt;ds:Signature</span> <span class="c-attr">xmlns:ds</span>=<span class="c-val">"...xmldsig#"</span><span class="c-tag">&gt;</span>
+      <span class="c-cmt">&lt;!-- Signature numérique du message --&gt;</span>
+    <span class="c-tag">&lt;/ds:Signature&gt;</span>
+  <span class="c-tag">&lt;/wsse:Security&gt;</span>
+<span class="c-tag">&lt;/soap:Header&gt;</span></pre>
+          <div style="margin-top:8px;font-size:11px;color:var(--green)">✅ Même sans HTTPS, le contenu reste chiffré et infalsifiable</div>
+        </div>
+      </div>
+
+      <div class="ws-card" style="border-color:#1F6FEB44">
+        <div class="ws-card-hdr" style="background:#1F6FEB11;color:var(--blue)">📨 WS-ReliableMessaging — Livraison garantie</div>
+        <div class="ws-card-body">
+          <div style="color:var(--muted);margin-bottom:8px">Accusés de réception, réémission automatique, déduplication. Un virement bancaire <strong>ne peut pas se perdre</strong>.</div>
+          <div style="font-size:11px">
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--blue)">→</span> Client envoie message + numéro de séquence</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--blue)">→</span> Serveur accuse réception (AcknowledgementRange)</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--orange)">⚠</span> Si pas d'accusé → réémission automatique</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="color:var(--green)">✅</span> Déduplication : doublons détectés et ignorés</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="ws-card" style="border-color:#F0883E44;margin-bottom:14px">
+        <div class="ws-card-hdr" style="background:#F0883E11;color:var(--orange)">⚛️ WS-AtomicTransaction — Transactions ACID distribuées</div>
+        <div class="ws-card-body">
+          <div style="color:var(--muted);margin-bottom:10px">Transactions ACID sur <strong>plusieurs systèmes distants</strong>. Si un système échoue → rollback global de tous les autres. REST n'a <strong>pas d'équivalent natif</strong>.</div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:11.5px">
+            <div style="color:var(--orange);font-weight:700;margin-bottom:8px">Exemple : Virement entre 2 banques</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;align-items:center;gap:8px"><span style="background:#3FB95033;color:var(--green);padding:2px 8px;border-radius:4px;font-size:10px">ÉTAPE 1</span><span>Débiter compte source (Banque A)</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="background:#3FB95033;color:var(--green);padding:2px 8px;border-radius:4px;font-size:10px">ÉTAPE 2</span><span>Créditer compte dest. (Banque B)</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="background:#FF7B7233;color:var(--red);padding:2px 8px;border-radius:4px;font-size:10px">ERREUR</span><span>Banque B indisponible → panne réseau</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="background:#F0883E33;color:var(--orange);padding:2px 8px;border-radius:4px;font-size:10px">ROLLBACK</span><span>Débit Banque A annulé automatiquement ✅</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ws-card" style="border-color:#D2A8FF44">
+        <div class="ws-card-hdr" style="background:#D2A8FF11;color:var(--purple)">🗺️ WS-Addressing — Routage des messages</div>
+        <div class="ws-card-body">
+          <div style="color:var(--muted);margin-bottom:8px">Standardise les adresses source/destination dans le Header. Permet le routage via intermédiaires et les communications asynchrones dans les architectures SOA.</div>
+          <div class="code-header" style="margin-top:8px"><span class="code-filename">ws-addressing-header.xml</span></div>
+          <pre style="font-size:10.5px;border-radius:0 0 6px 6px"><span class="c-tag">&lt;wsa:To</span> <span class="c-attr">xmlns:wsa</span>=<span class="c-val">"...2005/08/addressing"</span><span class="c-tag">&gt;</span>
+  <span class="c-str">https://api.banque.tg/soap/virement</span>
+<span class="c-tag">&lt;/wsa:To&gt;</span>
+<span class="c-tag">&lt;wsa:ReplyTo&gt;</span>
+  <span class="c-tag">&lt;wsa:Address&gt;</span><span class="c-str">https://client.app.tg/callback</span><span class="c-tag">&lt;/wsa:Address&gt;</span>
+<span class="c-tag">&lt;/wsa:ReplyTo&gt;</span>
+<span class="c-tag">&lt;wsa:MessageID&gt;</span><span class="c-str">uuid:550e8400-e29b-41d4</span><span class="c-tag">&lt;/wsa:MessageID&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 6 : COMPARE ═══════════ -->
+<div id="tab-compare" class="section">
+  <div class="info-box green" style="margin-bottom:16px">
+    <div class="info-icon">⚖️</div>
+    <div><strong>SOAP vs REST — Ce n'est PAS une bataille !</strong> Ce sont deux outils complémentaires. SOAP pour la rigueur enterprise, REST pour la légèreté. Dans les grandes organisations, les <strong>deux coexistent</strong>.</div>
+  </div>
+
+  <table class="cmp-table" style="margin-bottom:20px">
+    <thead>
+      <tr><th>Critère</th><th class="soap-col">SOAP</th><th class="rest-col">REST</th><th>Verdict</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Format des données</strong></td><td class="soap-col">XML uniquement (strict)</td><td class="rest-col">JSON, XML, YAML… (libre)</td><td class="rest-col">REST (flexibilité)</td></tr>
+      <tr><td><strong>Contrat de service</strong></td><td class="soap-col">WSDL obligatoire</td><td class="rest-col">OpenAPI optionnel</td><td class="soap-col">SOAP (rigueur)</td></tr>
+      <tr><td><strong>Protocoles transport</strong></td><td class="soap-col">HTTP, SMTP, TCP, JMS</td><td class="rest-col">HTTP uniquement</td><td class="soap-col">SOAP (flexibilité)</td></tr>
+      <tr><td><strong>Gestion d'état</strong></td><td class="soap-col">Stateful possible (WS-*)</td><td class="rest-col">Stateless uniquement</td><td class="soap-col">SOAP (sessions)</td></tr>
+      <tr><td><strong>Sécurité</strong></td><td class="soap-col win">WS-Security (niveau message)</td><td class="rest-col">HTTPS (niveau transport)</td><td class="soap-col">SOAP (banque/santé)</td></tr>
+      <tr><td><strong>Transactions ACID</strong></td><td class="soap-col win">✅ WS-AtomicTransaction</td><td class="rest-col lose">❌ Pas de natif</td><td class="soap-col">SOAP uniquement</td></tr>
+      <tr><td><strong>Performance</strong></td><td class="soap-col lose">Plus lent (XML verbeux)</td><td class="rest-col win">✅ Rapide (JSON léger)</td><td class="rest-col">REST (mobile/web)</td></tr>
+      <tr><td><strong>Courbe d'apprentissage</strong></td><td class="soap-col lose">Complexe (WS-*, WSDL…)</td><td class="rest-col win">Simple (HTTP + JSON)</td><td class="rest-col">REST (dév. rapide)</td></tr>
+      <tr><td><strong>Cas d'usage idéal</strong></td><td class="soap-col">Banque · Santé · Télécom · Gov</td><td class="rest-col">APIs web · Mobile · Startups</td><td>Selon le contexte</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid-2" style="gap:16px">
+    <div class="card">
+      <div class="card-header"><span class="card-title" style="color:var(--teal)">🏦 Quand choisir SOAP ?</span></div>
+      <div class="card-body">
+        <div class="steps">
+          <div class="step"><div class="step-num" style="background:#2DD4BF22;color:var(--teal);border:1px solid #2DD4BF44">✓</div><div class="step-body"><div class="step-title">Sécurité de niveau entreprise requise</div><div class="step-desc">Chiffrement message-level, conformité PCI-DSS, HIPAA, réglements bancaires.</div></div></div>
+          <div class="step"><div class="step-num" style="background:#2DD4BF22;color:var(--teal);border:1px solid #2DD4BF44">✓</div><div class="step-body"><div class="step-title">Transactions distribuées critiques</div><div class="step-desc">Virements, réservations multi-systèmes où un échec partiel est inacceptable.</div></div></div>
+          <div class="step"><div class="step-num" style="background:#2DD4BF22;color:var(--teal);border:1px solid #2DD4BF44">✓</div><div class="step-body"><div class="step-title">Intégration de systèmes legacy</div><div class="step-desc">ERP SAP/Oracle, systèmes mainframe, plateformes télécom OSS/BSS.</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title" style="color:var(--orange)">🚀 Quand choisir REST ?</span></div>
+      <div class="card-body">
+        <div class="steps">
+          <div class="step"><div class="step-num" style="background:#F0883E22;color:var(--orange);border:1px solid #F0883E44">✓</div><div class="step-body"><div class="step-title">APIs publiques grand public</div><div class="step-desc">Applications mobiles, startups, plateformes web modernes, microservices.</div></div></div>
+          <div class="step"><div class="step-num" style="background:#F0883E22;color:var(--orange);border:1px solid #F0883E44">✓</div><div class="step-body"><div class="step-title">Besoin de rapidité de développement</div><div class="step-desc">JSON natif JS/Python, pas de génération de stubs, tests avec curl/Postman.</div></div></div>
+          <div class="step"><div class="step-num" style="background:#F0883E22;color:var(--orange);border:1px solid #F0883E44">✓</div><div class="step-body"><div class="step-title">Scalabilité horizontale massive</div><div class="step-desc">Stateless = facile à scaler. IoT, streaming, applications haute charge.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 7 : APPS ═══════════ -->
+<div id="tab-apps" class="section">
+  <div class="grid-3" style="gap:16px;margin-bottom:20px">
+    <div class="card">
+      <div class="card-header" style="background:#16A34A22;border-color:#16A34A44"><span class="card-title" style="color:var(--green)">🏦 Banque & Finance</span></div>
+      <div class="card-body" style="font-size:12px">
+        <div style="margin-bottom:8px"><strong style="color:var(--green)">SWIFT ISO 20022</strong> — Format MX basé sur SOAP. Virements interbancaires mondiaux. Adoption universelle en cours (2023-2025).</div>
+        <div style="margin-bottom:8px"><strong style="color:var(--green)">PCI-DSS</strong> — Norme carte bancaire. WS-Security obligatoire pour le chiffrement des données de paiement.</div>
+        <div><strong style="color:var(--green)">Cas concret</strong> — Virement Ecobank → ORABANK via SOAP : token chiffré WS-Security + WS-AtomicTransaction garantit la cohérence.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="background:#DC262622;border-color:#DC262644"><span class="card-title" style="color:var(--red)">🏥 Santé Numérique</span></div>
+      <div class="card-body" style="font-size:12px">
+        <div style="margin-bottom:8px"><strong style="color:var(--red)">HL7 v3</strong> — Standard mondial d'échange de données médicales. Messages structurés SOAP entre hôpitaux.</div>
+        <div style="margin-bottom:8px"><strong style="color:var(--red)">HIPAA</strong> — Loi US sur la confidentialité médicale. WS-Security obligatoire pour les échanges de données patient.</div>
+        <div><strong style="color:var(--red)">Stateful</strong> — Une consultation multi-étapes (auth médecin → dossier → prescription) maintenue en session SOAP.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="background:#1F6FEB22;border-color:#1F6FEB44"><span class="card-title" style="color:var(--blue)">🏛 Gouvernement</span></div>
+      <div class="card-body" style="font-size:12px">
+        <div style="margin-bottom:8px"><strong style="color:var(--blue)">DGI Togo/Bénin</strong> — Déclarations fiscales électroniques via services SOAP. WSDL garantit format exact des données.</div>
+        <div style="margin-bottom:8px"><strong style="color:var(--blue)">État civil numérique</strong> — Échanges inter-registres (naissance, mariage, décès) sécurisés par WS-Security.</div>
+        <div><strong style="color:var(--blue)">e-Gov</strong> — Portails gouvernementaux interconnectés via bus de services SOA/SOAP dans de nombreux pays.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="background:#F0883E22;border-color:#F0883E44"><span class="card-title" style="color:var(--orange)">📡 Télécommunications</span></div>
+      <div class="card-body" style="font-size:12px">
+        <div style="margin-bottom:8px"><strong style="color:var(--orange)">OSS/BSS</strong> — Systèmes d'opération et de support business. Orange, MTN, Togocom : historiquement SOAP.</div>
+        <div style="margin-bottom:8px"><strong style="color:var(--orange)">Mobile Money</strong> — Transferts inter-opérateurs (Flooz ↔ T-Money) via services SOAP pour la cohérence transactionnelle.</div>
+        <div><strong style="color:var(--orange)">Recharge</strong> — APIs de recharge à la demande, activation de services via SOAP/WSDL entre MVNO et opérateurs.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="background:#7C3AED22;border-color:#7C3AED44"><span class="card-title" style="color:var(--purple)">⚙️ ERP & Entreprise</span></div>
+      <div class="card-body" style="font-size:12px">
+        <div style="margin-bottom:8px"><strong style="color:var(--purple)">SAP PI/PO</strong> — Process Integration / Orchestration. Connecte SAP aux systèmes tiers via SOAP. Standard dans les grandes entreprises.</div>
+        <div style="margin-bottom:8px"><strong style="color:var(--purple)">Oracle SOA Suite</strong> — Orchestre les processus métier cross-systèmes via des services SOAP dans les architectures SOA.</div>
+        <div><strong style="color:var(--purple)">Microsoft Dynamics</strong> — Expose ses fonctions CRM/ERP via SOAP/WSDL pour l'intégration avec d'autres systèmes.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="background:#E3B34122;border-color:#E3B34144"><span class="card-title" style="color:var(--yellow)">💡 Pourquoi SOAP persiste ?</span></div>
+      <div class="card-body" style="font-size:12px">
+        <div style="margin-bottom:8px"><strong style="color:var(--yellow)">Coût de migration</strong> — Remplacer un système SOAP bancaire en production = risque et coût énormes. Les systèmes durent 20-30 ans.</div>
+        <div style="margin-bottom:8px"><strong style="color:var(--yellow)">Conformité réglementaire</strong> — PCI-DSS, HIPAA, GDPR imposent des niveaux de sécurité que WS-Security satisfait nativement.</div>
+        <div><strong style="color:var(--yellow)">Gagan Mehta (2025)</strong> — <em>"SOAP est irremplaçable dans des secteurs comme la banque, les télécoms et les services gouvernementaux."</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box orange">
+    <div class="info-icon">🌍</div>
+    <div><strong>En Afrique de l'Ouest</strong> — Les systèmes d'interopérabilité bancaire (BCEAO, GIM-UEMOA), les plateformes Mobile Money inter-opérateurs et les systèmes d'information gouvernementaux utilisent massivement SOAP pour ses garanties de sécurité et de fiabilité transactionnelle.</div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<script src="js/app.js"></script>
+</body>
+</html>
