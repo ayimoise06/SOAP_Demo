@@ -14,7 +14,7 @@
     <div class="topbar-logo">SOAP</div>
     <div>
       <div class="topbar-title">Démo Interactive — Simple Object Access Protocol</div>
-      <div class="topbar-sub">UL/EPL · INF1429 · MEBOUNOU & HUNLEDE · Groupe</div>
+      <div class="topbar-sub">UL/EPL · INF1429 </div>
     </div>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
@@ -95,7 +95,7 @@
         <div class="arrow-sep">→</div>
         <div class="arrow-node" style="border-color:#2DD4BF44;color:var(--teal)">📱 Client reçoit<br><small style="color:var(--muted)">Données parsées</small></div>
       </div>
-      <div class="tip">Pour la présentation : montrez ce flux en pointant sur la slide, puis dites "on va maintenant voir chaque composant en détail et faire une vraie démo live dans l'onglet Simulateur".</div>
+      <div class="tip"></div>
     </div>
   </div>
 </div>
@@ -104,7 +104,7 @@
 <div id="tab-anatomy" class="section">
   <div class="grid-2" style="gap:20px">
     <div>
-      <div style="margin-bottom:12px;font-size:13px;color:var(--muted)">👆 Cliquez sur une couche pour voir les détails</div>
+      <div style="margin-bottom:12px;font-size:13px;color:var(--muted)"></div>
       <div class="anatomy-box">
         <div class="anatomy-layer" style="background:#1F3A5C;border-color:#2E75B6;color:var(--blue)" onclick="showLayer('envelope')">
           <div class="anatomy-title">&lt;soap:Envelope&gt; <span class="anatomy-badge" style="background:#1F6FEB22;color:var(--blue);border:1px solid #1F6FEB44">OBLIGATOIRE</span></div>
@@ -168,7 +168,7 @@
 <div id="tab-simulator" class="section">
   <div class="info-box green" style="margin-bottom:16px">
     <div class="info-icon">⚡</div>
-    <div><strong>Simulateur SOAP interactif</strong> — Sélectionnez un scénario, configurez les paramètres, et générez un message SOAP valide avec sa réponse. Idéal pour la démo en classe !</div>
+    <div><strong>Simulateur SOAP interactif</strong> — Sélectionnez un scénario, configurez les paramètres, et générez un message SOAP valide avec sa réponse.</div>
   </div>
 
   <div class="sim-wrap">
@@ -239,10 +239,10 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-header"><span class="card-title" style="color:var(--yellow)">💡 Explications pour la classe</span></div>
+      <div class="card-header"><span class="card-title" style="color:var(--yellow)">💡 Explications /span></div>
       <div class="card-body">
         <div id="explanation" style="font-size:12.5px;color:var(--muted);line-height:1.7">
-          Lancez un scénario et je vous expliquerai chaque partie du message généré, ce qu'elle signifie et pourquoi elle est structurée ainsi.
+          <p><strong>Erreur Sender (Client)</strong> : Le message SOAP est mal formé, ou les données sont invalides. Code de faute : <code style="color:var(--red)">soap:Sender</code>. Exemple
         </div>
       </div>
     </div>
